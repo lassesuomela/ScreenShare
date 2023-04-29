@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, desktopCapturer } = require("electron");
 const path = require("path");
+require("update-electron-app")();
 
 const remoteMain = require("@electron/remote/main");
 remoteMain.initialize();
