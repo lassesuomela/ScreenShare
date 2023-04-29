@@ -1,3 +1,6 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 module.exports = {
   packagerConfig: {},
   rebuildConfig: {},
@@ -29,6 +32,7 @@ module.exports = {
         },
         prerelease: false,
         draft: true,
+        authToken: process.env.GITHUB_TOKEN,
       },
     },
   ],

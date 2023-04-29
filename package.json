@@ -1,19 +1,21 @@
 {
   "name": "screenshareelectron",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Screen sharing between two apps",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
   "keywords": [],
-  "author": "",
+  "author": "Lasse Suomela",
   "license": "ISC",
   "dependencies": {
     "@electron/remote": "^2.0.9",
+    "dotenv": "^16.0.3",
     "electron-squirrel-startup": "^1.0.0"
   },
   "devDependencies": {
