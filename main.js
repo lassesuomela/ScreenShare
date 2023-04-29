@@ -11,7 +11,7 @@ if (require("electron-squirrel-startup")) {
 }
 
 try {
-  require("electron-reloader")(module);
+  require("electron-reloader")();
 } catch (_) {}
 
 const createWindow = () => {

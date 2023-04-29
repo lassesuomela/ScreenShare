@@ -1,4 +1,4 @@
-const { desktopCapturer, ipcRenderer } = require("electron");
+const { ipcRenderer } = require("electron");
 const remote = require("@electron/remote");
 
 const { Menu } = remote;
