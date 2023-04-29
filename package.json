@@ -1,6 +1,6 @@
 {
   "name": "screenshareelectron",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Screen sharing between two apps",
   "main": "main.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish --platform=win32 linux --arch=x64"
+    "publish": "electron-forge publish"
   },
   "keywords": [],
   "author": "Lasse Suomela",
