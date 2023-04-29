@@ -1,4 +1,4 @@
-name: Make release for win32
+name: Build and release
 
 on:
   push:
@@ -40,8 +40,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: sudo apt-get update
-    - run: sudo apt-get upgrade
     - run: sudo apt-get install wine64
     - run: npm ci
     - run: npm run publish --platform=win32 --arch=x64
@@ -61,8 +59,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: sudo apt-get update
-    - run: sudo apt-get upgrade
     - run: sudo apt-get install wine64
     - run: npm ci
     - run: npm run publish --platform=linux --arch=x64
