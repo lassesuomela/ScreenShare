@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'; style-src 'self' https://cdn.jsdelivr.net;
+    ">
+
+    <title>Screen share</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="index.css" />
+    <script defer src="render.js"></script>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Screen share</h1>
+    </div>
+    
+    <div class="container video-container">
+      <video></video>
+    </div>
+
+    <div class="buttons">
+      <button id="startBtn" class="button is-primary">Start</button>
+      <button id="stopBtn" class="button is-warning">Stop</button>
+      <button id="videoSelectBtn" class="button is-info">Select source</button>
+    </div>
+
+    <div class="container source">
+      <p>Current source:</p>
+      <p id="currentSourceText">-</p>
+    </div>
+
+  </body>
+</html>
