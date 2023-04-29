@@ -24,7 +24,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
-  release:
+  releaseWin32:
     needs: build
 
     runs-on: ubuntu-latest
@@ -41,3 +41,20 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm run publish --platform=win32 --arch=x64
+  releaseLinux:
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm run publish --platform=linux --arch=x64
