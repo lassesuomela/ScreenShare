@@ -7,27 +7,17 @@ let videoOptionsMenu;
 let stream;
 let callConnection;
 
-const videoFeed = document.getElementById("master");
-
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
 
-const host = document.getElementById("host");
-
 const peerId = document.getElementById("peerId");
-const copyIdBtn = document.getElementById("copyIdBtn");
-
-const videoSelectBtn = document.getElementById("videoSelectBtn");
-videoSelectBtn.onclick = showSources;
 
 const currentSourceText = document.getElementById("currentSourceText");
-
+const videoSelectBtn = document.getElementById("videoSelectBtn");
+videoSelectBtn.onclick = showSources;
 const peer = new Peer();
 
-let myId;
-peer.on("open", (id) => {
-  myId = id;
-});
+peer.on("open", (id) => {});
 
 peer.on("call", (call) => {
   console.log("answering call");
@@ -35,8 +25,6 @@ peer.on("call", (call) => {
   call.answer(stream);
   call.on("stream", (remoteStream) => {
     console.log("got call stream");
-    videoFeed.srcObject = remoteStream;
-    videoFeed.play();
   });
 });
 
@@ -69,16 +57,11 @@ stopBtn.onclick = (e) => {
   callConnection.close();
 };
 
-copyIdBtn.onclick = (e) => {
-  navigator.clipboard.writeText(myId);
-};
-
 function stop() {
   startBtn.classList.remove("btn-danger");
   startBtn.innerText = "Start";
   startBtn.removeAttribute("disabled");
 
-  videoFeed.srcObject = null;
   currentSourceText.innerText = "-";
 }
 
