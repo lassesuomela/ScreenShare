@@ -5,18 +5,17 @@ const { Peer } = require("peerjs");
 
 let videoOptionsMenu;
 let stream;
+let callConnection;
 
-const video = document.getElementById("master");
-const videoSlave = document.getElementById("slave");
+const videoFeed = document.getElementById("master");
 
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
-const connectBtn = document.getElementById("connectBtn");
 
 const host = document.getElementById("host");
 
 const peerId = document.getElementById("peerId");
-const myId = document.getElementById("myId");
+const copyIdBtn = document.getElementById("copyIdBtn");
 
 const videoSelectBtn = document.getElementById("videoSelectBtn");
 videoSelectBtn.onclick = showSources;
@@ -25,17 +24,19 @@ const currentSourceText = document.getElementById("currentSourceText");
 
 const peer = new Peer();
 
+let myId;
 peer.on("open", (id) => {
-  myId.innerText = id;
+  myId = id;
 });
 
 peer.on("call", (call) => {
   console.log("answering call");
+  callConnection = call;
   call.answer(stream);
   call.on("stream", (remoteStream) => {
     console.log("got call stream");
-    videoSlave.srcObject = remoteStream;
-    videoSlave.play();
+    videoFeed.srcObject = remoteStream;
+    videoFeed.play();
   });
 });
 
@@ -45,40 +46,40 @@ peer.on("disconnected", () => {
 });
 
 function call(remotePeerId) {
-  const call = peer.call(remotePeerId, stream);
+  callConnection = peer.call(remotePeerId, stream);
 
-  call.on("stream", (remoteStream) => {
+  callConnection.on("stream", (remoteStream) => {
     console.log("got remote stream");
-    video.srcObject = remoteStream;
-    video.play();
+    videoFeed.srcObject = remoteStream;
+    videoFeed.play();
   });
 }
 
-connectBtn.onclick = () => {
+startBtn.onclick = (e) => {
+  startBtn.classList.add("btn-danger");
+  startBtn.innerText = "Streaming";
+  startBtn.setAttribute("disabled", "true");
+
   console.log("Calling to:", peerId.value);
   call(peerId.value);
 };
 
-startBtn.onclick = (e) => {
-  startBtn.classList.add("is-danger");
-  startBtn.innerText = "Streaming";
-  startBtn.setAttribute("disabled", "true");
+stopBtn.onclick = (e) => {
+  stop();
+  callConnection.close();
 };
 
-stopBtn.onclick = (e) => {
-  peer.close();
-  stop();
+copyIdBtn.onclick = (e) => {
+  navigator.clipboard.writeText(myId);
 };
 
 function stop() {
-  startBtn.classList.remove("is-danger");
+  startBtn.classList.remove("btn-danger");
   startBtn.innerText = "Start";
   startBtn.removeAttribute("disabled");
 
-  video.srcObject = null;
+  videoFeed.srcObject = null;
   currentSourceText.innerText = "-";
-
-  videoSlave.srcObject = null;
 }
 
 function showSources() {
