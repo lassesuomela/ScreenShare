@@ -6,6 +6,9 @@ on:
     paths-ignore:
       - ".github/*"
 
+env:
+  GITHUB_TOKEN: ${{secrets.REPO_GITHUB_TOKEN}}
+
 jobs:
   build:
 
@@ -43,22 +46,3 @@ jobs:
     - run: sudo apt-get install wine64
     - run: npm ci
     - run: npm run publish --platform=win32 --arch=x64
-  releaseLinux:
-    needs: build
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x]
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: sudo apt-get install wine64
-    - run: npm ci
-    - run: npm run publish --platform=linux --arch=x64
