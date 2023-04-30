@@ -1,7 +1,7 @@
 {
   "name": "screenshareelectron",
-  "version": "0.0.2",
-  "description": "Screen sharing between two apps",
+  "version": "0.0.3",
+  "description": "One way screen sharing",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
