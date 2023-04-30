@@ -19,23 +19,28 @@
     </div>
     
     <div class="container video-container">
-      <video></video>
+      <video id="master"></video>
     </div>
 
     <div class="buttons">
       <button id="startBtn" class="button is-primary">Start</button>
       <button id="stopBtn" class="button is-warning">Stop</button>
       <button id="videoSelectBtn" class="button is-info">Select source</button>
+      <button id="connectBtn" class="button is-success">Connect</button>
+      <input id="host" type="checkbox">
+    </div>
+
+    <div class="container">
+      <p>My Id:</p>
+      <span id="myId"></span>
+      <div>
+        <input type="text" id="peerId" >
+      </div>
     </div>
 
     <div class="container source">
       <p>Current source:</p>
       <p id="currentSourceText">-</p>
-    </div>
-
-    <h2>Other screen</h2>
-    <div class="container video-container">
-      <video id="slave"></video>
     </div>
 
   </body>

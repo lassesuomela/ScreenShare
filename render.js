@@ -1,79 +1,90 @@
 const { ipcRenderer } = require("electron");
 const remote = require("@electron/remote");
 const { Menu } = remote;
-const Peer = require("simple-peer");
+const { Peer } = require("peerjs");
 
 let videoOptionsMenu;
 let stream;
 
-const videoElement = document.querySelector("video");
-const videoElementSlave = document.getElementById("slave");
+const video = document.getElementById("master");
+const videoSlave = document.getElementById("slave");
 
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
+const connectBtn = document.getElementById("connectBtn");
+
+const host = document.getElementById("host");
+
+const peerId = document.getElementById("peerId");
+const myId = document.getElementById("myId");
+
 const videoSelectBtn = document.getElementById("videoSelectBtn");
+videoSelectBtn.onclick = showSources;
+
 const currentSourceText = document.getElementById("currentSourceText");
 
-let peer1;
-let peer2;
+const peer = new Peer();
+
+peer.on("open", (id) => {
+  myId.innerText = id;
+});
+
+peer.on("call", (call) => {
+  console.log("answering call");
+  call.answer(stream);
+  call.on("stream", (remoteStream) => {
+    console.log("got call stream");
+    videoSlave.srcObject = remoteStream;
+    videoSlave.play();
+  });
+});
+
+peer.on("disconnected", () => {
+  console.log("Peer dc");
+  stop();
+});
+
+function call(remotePeerId) {
+  const call = peer.call(remotePeerId, stream);
+
+  call.on("stream", (remoteStream) => {
+    console.log("got remote stream");
+    video.srcObject = remoteStream;
+    video.play();
+  });
+}
+
+connectBtn.onclick = () => {
+  console.log("Calling to:", peerId.value);
+  call(peerId.value);
+};
 
 startBtn.onclick = (e) => {
-  if (videoElement.srcObject === null) {
-    return;
-  }
-
-  if (!peer1) {
-    peer1 = new Peer({ initiator: true, stream: stream });
-  }
-  if (!peer2) {
-    peer2 = new Peer();
-  }
-
   startBtn.classList.add("is-danger");
   startBtn.innerText = "Streaming";
   startBtn.setAttribute("disabled", "true");
-
-  peer1.on("signal", (data) => {
-    peer2.signal(data);
-  });
-
-  peer2.on("signal", (data) => {
-    peer1.signal(data);
-  });
-
-  peer2.on("stream", (stream) => {
-    // got remote video stream, now let's show it in a video tag
-    const video = document.getElementById("slave");
-
-    if ("srcObject" in video) {
-      video.srcObject = stream;
-    } else {
-      video.src = window.URL.createObjectURL(stream); // for older browsers
-    }
-
-    video.play();
-  });
 };
 
 stopBtn.onclick = (e) => {
-  if (videoElement.srcObject === null) {
-    return;
-  }
+  peer.close();
+  stop();
+};
 
+function stop() {
   startBtn.classList.remove("is-danger");
   startBtn.innerText = "Start";
   startBtn.removeAttribute("disabled");
 
-  videoElement.srcObject = null;
+  video.srcObject = null;
   currentSourceText.innerText = "-";
 
-  peer1.destroy();
-  peer2.destroy();
-};
-
-videoSelectBtn.onclick = showSources;
+  videoSlave.srcObject = null;
+}
 
 function showSources() {
+  if (!videoOptionsMenu) {
+    return;
+  }
   videoOptionsMenu.popup();
 }
 
@@ -100,18 +111,21 @@ async function selectSource(source) {
         chromeMediaSource: "desktop",
         chromeMediaSourceId: source.id,
       },
+      exact: {
+        chromeMediaSource: "desktop",
+        chromeMediaSourceId: source.id,
+      },
     },
   };
 
-  const newStream = await navigator.mediaDevices.getUserMedia(constraints);
-  videoElement.srcObject = newStream;
-  videoElement.play();
-
-  if (!stream) {
-    stream = newStream;
-  } else {
-    peer1.removeStream(stream);
-    peer1.addStream(newStream);
+  try {
+    const newStream = await navigator.mediaDevices.getUserMedia(constraints);
+    if (!stream) {
+      stream = newStream;
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Failed to get user media");
   }
 }
 
