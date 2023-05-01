@@ -1,5 +1,5 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   padding: 0;
   margin: 0;
   display: flex;
@@ -22,16 +22,37 @@ body {
 .header {
   text-align: center;
   padding-top: 1.2em;
+  padding-bottom: 1em;
 }
 
-.buttons {
+.header h1 {
+  font-size: 3em;
+}
+
+.buttons, .buttons-main {
   display: flex;
   align-items: center;
   justify-content: center;
   gap:0.5em;
   padding-bottom: 0.5em;
 }
+.buttons-main {
+  padding-top: 2em;
+  gap: 1em;
+}
+.buttons-main a {
+  font-size: 1.5em;
+}
 
 .source {
+  padding-top: 2em;
   flex-direction: column;
+}
+
+.main {
+  margin-top: 10em;
+}
+
+.main h1 {
+  font-size: 3em;
 }
