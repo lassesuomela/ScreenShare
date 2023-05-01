@@ -34,6 +34,9 @@ peer.on("disconnected", () => {
 });
 
 stopBtn.onclick = (e) => {
+  if (!callConnection) {
+    return;
+  }
   callConnection.close();
   stop();
 };
@@ -42,6 +45,6 @@ copyIdBtn.onclick = (e) => {
   navigator.clipboard.writeText(myId);
 };
 
-function stop() {
+const stop = () => {
   videoFeed.srcObject = null;
-}
+};

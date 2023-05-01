@@ -16,16 +16,18 @@ const peerId = document.getElementById("peerId");
 
 const currentSourceText = document.getElementById("currentSourceText");
 const videoSelectBtn = document.getElementById("videoSelectBtn");
-videoSelectBtn.onclick = showSources;
 
-peer.on("open", (id) => {});
+peer.on("open", (id) => {
+  console.log("Got id:", id);
+  console.log(peer);
+});
 
 peer.on("disconnected", () => {
   console.log("Peer dc");
   stop();
 });
 
-function call(remotePeerId) {
+const call = (remotePeerId) => {
   callConnection = peer.call(remotePeerId, stream);
 
   callConnection.on("stream", (remoteStream) => {
@@ -33,9 +35,12 @@ function call(remotePeerId) {
     videoFeed.srcObject = remoteStream;
     videoFeed.play();
   });
-}
+};
 
 startBtn.onclick = (e) => {
+  if (!stream || !peerId.value) {
+    return;
+  }
   startBtn.classList.add("btn-danger");
   startBtn.innerText = "Streaming";
   startBtn.setAttribute("disabled", "true");
@@ -45,39 +50,52 @@ startBtn.onclick = (e) => {
 };
 
 stopBtn.onclick = (e) => {
+  if (!stream) {
+    return;
+  }
+
   stop();
   callConnection.close();
 };
 
-function stop() {
+const stop = () => {
   startBtn.classList.remove("btn-danger");
   startBtn.innerText = "Start";
   startBtn.removeAttribute("disabled");
 
   currentSourceText.innerText = "-";
-}
+};
 
-function showSources() {
+const showSources = () => {
   if (!videoOptionsMenu) {
     return;
   }
   videoOptionsMenu.popup();
-}
+};
 
-async function getSources() {
-  const inputSources = await ipcRenderer.invoke("getSources");
+videoSelectBtn.onclick = showSources;
 
+const getSources = async () => {
+  console.log("get sources");
+  let sources;
+  try {
+    sources = await ipcRenderer.invoke("getSources");
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log(sources);
   videoOptionsMenu = Menu.buildFromTemplate(
-    inputSources.map((source) => {
+    sources.map((source) => {
       return {
         label: source.name,
         click: () => selectSource(source),
       };
     })
   );
-}
+};
 
-async function selectSource(source) {
+const selectSource = async (source) => {
   currentSourceText.innerText = source.name;
 
   const constraints = {
@@ -95,14 +113,11 @@ async function selectSource(source) {
   };
 
   try {
-    const newStream = await navigator.mediaDevices.getUserMedia(constraints);
-    if (!stream) {
-      stream = newStream;
-    }
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
   } catch (err) {
     console.error(err);
     alert("Failed to get user media");
   }
-}
+};
 
 getSources();

@@ -1,6 +1,6 @@
 {
   "name": "screenshare",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "One way screen sharing",
   "main": "src/main.js",
   "scripts": {
@@ -18,8 +18,7 @@
     "dotenv": "^16.0.3",
     "electron-squirrel-startup": "^1.0.0",
     "peerjs": "^1.4.7",
-    "simple-peer": "^9.11.1",
-    "update-electron-app": "^2.0.1"
+    "simple-peer": "^9.11.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
