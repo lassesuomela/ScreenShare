@@ -10,3 +10,7 @@ For one-way screen sharing. Made with Electron and vanilla JS.
    - Built version will be in `out/` directory
 
 # Screenshots
+
+![Index.html](screenshots/index.png)
+![Host](screenshots/host.png)
+![Watch](screenshots/watch.png)
