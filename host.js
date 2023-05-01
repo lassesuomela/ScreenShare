@@ -7,6 +7,8 @@ let videoOptionsMenu;
 let stream;
 let callConnection;
 
+const peer = new Peer();
+
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
 
@@ -15,18 +17,8 @@ const peerId = document.getElementById("peerId");
 const currentSourceText = document.getElementById("currentSourceText");
 const videoSelectBtn = document.getElementById("videoSelectBtn");
 videoSelectBtn.onclick = showSources;
-const peer = new Peer();
 
 peer.on("open", (id) => {});
-
-peer.on("call", (call) => {
-  console.log("answering call");
-  callConnection = call;
-  call.answer(stream);
-  call.on("stream", (remoteStream) => {
-    console.log("got call stream");
-  });
-});
 
 peer.on("disconnected", () => {
   console.log("Peer dc");
