@@ -17,3 +17,7 @@ Host page
 ![Host](screenshots/host.png)
 Watch page
 ![Watch](screenshots/watch.png)
+Hosting
+![Hosting](screenshots/sharing.png)
+Watching
+![Watching](screenshots/watching.png)
