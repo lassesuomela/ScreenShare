@@ -7,10 +7,13 @@ For one-way screen sharing. Made with Electron and vanilla JS.
  - `npm i` to install dependencies
  - `npm start` to start dev version
  - `npm run make` to build the app
-   - Built version will be in `out/` directory
+   - Built version will be in `out/screenshare-<os>-<arch>` directory
 
 # Screenshots
 
+Main page when app is opened
 ![Index.html](screenshots/index.png)
+Host page
 ![Host](screenshots/host.png)
+Watch page
 ![Watch](screenshots/watch.png)

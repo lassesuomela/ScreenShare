@@ -17,14 +17,16 @@ const peerId = document.getElementById("peerId");
 const currentSourceText = document.getElementById("currentSourceText");
 const videoSelectBtn = document.getElementById("videoSelectBtn");
 
-peer.on("open", (id) => {
-  console.log("Got id:", id);
-  console.log(peer);
-});
+peer.on("open", (id) => {});
 
 peer.on("disconnected", () => {
   console.log("Peer dc");
   stop();
+});
+
+peer.on("connection", (connection) => {
+  console.log("connected");
+  console.log(connection);
 });
 
 const call = (remotePeerId) => {
@@ -34,6 +36,11 @@ const call = (remotePeerId) => {
     console.log("got remote stream");
     videoFeed.srcObject = remoteStream;
     videoFeed.play();
+
+    setInterval(() => {
+      console.log("Sending ping");
+      callConnection.send("Ping");
+    }, 5000);
   });
 };
 
@@ -76,7 +83,6 @@ const showSources = () => {
 videoSelectBtn.onclick = showSources;
 
 const getSources = async () => {
-  console.log("get sources");
   let sources;
   try {
     sources = await ipcRenderer.invoke("getSources");
@@ -84,7 +90,6 @@ const getSources = async () => {
     console.log(error);
   }
 
-  console.log(sources);
   videoOptionsMenu = Menu.buildFromTemplate(
     sources.map((source) => {
       return {
@@ -104,6 +109,7 @@ const selectSource = async (source) => {
       mandatory: {
         chromeMediaSource: "desktop",
         chromeMediaSourceId: source.id,
+        frameRate: 60,
       },
       exact: {
         chromeMediaSource: "desktop",
