@@ -5,6 +5,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
 }
 
 .container {
@@ -60,4 +61,12 @@ video {
 
 .main h1 {
   font-size: 3em;
+}
+
+@media screen and (max-width: 992px){
+  .video-container {
+    min-width: 60vw;
+    min-height: 60vh;
+    margin-bottom: 1em;
+  }
 }
