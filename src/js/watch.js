@@ -23,6 +23,9 @@ peer.on("call", (call) => {
     console.log("got call stream");
     videoFeed.srcObject = remoteStream;
     videoFeed.play();
+
+    toggleFullscreenBtn.removeAttribute("disabled");
+    stopBtn.removeAttribute("disabled");
   });
 });
 
@@ -44,6 +47,8 @@ copyIdBtn.onclick = (e) => {
 };
 
 const stop = () => {
+  toggleFullscreenBtn.setAttribute("disabled", true);
+  stopBtn.setAttribute("disabled", true);
   videoFeed.srcObject = null;
 };
 

@@ -120,6 +120,10 @@ const selectSource = async (source) => {
 
   try {
     stream = await navigator.mediaDevices.getUserMedia(constraints);
+    if (startBtn.innerText === "Start") {
+      startBtn.removeAttribute("disabled");
+    }
+    stopBtn.removeAttribute("disabled");
   } catch (err) {
     console.error(err);
     alert("Failed to get user media");
