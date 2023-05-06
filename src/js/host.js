@@ -12,6 +12,7 @@ const peer = new Peer();
 
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
+const backBtn = document.getElementById("backBtn");
 
 const peerId = document.getElementById("peerId");
 
@@ -62,6 +63,7 @@ startBtn.onclick = (e) => {
   startBtn.classList.add("btn-danger");
   startBtn.innerText = "Streaming";
   startBtn.setAttribute("disabled", "true");
+  stopBtn.removeAttribute("disabled");
 
   console.log("Calling to:", peerId.value);
   call(peerId.value);
@@ -72,6 +74,13 @@ stopBtn.onclick = (e) => {
     return;
   }
   connection.send("Stop");
+  stop();
+};
+
+backBtn.onclick = () => {
+  if (connection) {
+    connection.send("Stop");
+  }
   stop();
 };
 
@@ -143,7 +152,6 @@ const selectSource = async (source) => {
     if (startBtn.innerText === "Start") {
       startBtn.removeAttribute("disabled");
     }
-    stopBtn.removeAttribute("disabled");
 
     if (startBtn.innerText === "Streaming") {
       call(peerId.value);

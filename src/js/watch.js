@@ -3,10 +3,13 @@ const { Peer } = require("peerjs");
 let callConnection;
 let myId;
 let connection;
+
 const videoFeed = document.getElementById("master");
 const stopBtn = document.getElementById("stopBtn");
 const copyIdBtn = document.getElementById("copyIdBtn");
 const toggleFullscreenBtn = document.getElementById("toggleFullscreenBtn");
+const backBtn = document.getElementById("backBtn");
+
 const statusTxt = document.getElementById("statusTxt");
 
 const peer = new Peer();
@@ -60,6 +63,13 @@ stopBtn.onclick = (e) => {
     return;
   }
   connection.send("Stop");
+  stop();
+};
+
+backBtn.onclick = () => {
+  if (connection) {
+    connection.send("Stop");
+  }
   stop();
 };
 
