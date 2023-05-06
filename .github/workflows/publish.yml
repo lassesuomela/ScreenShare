@@ -72,6 +72,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+      - run: sudo apt-get install pacman snap
       - run: sudo pacman -Syyu --noconfirm
       - run: sudo pacman -S --noconfirm snapd
       - run: sudo systemctl enable --now snapd.socket
