@@ -24,15 +24,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run publish
-      - name: Create Windows Release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: Release ${GITHUB_REF}
-          body: |
-            Changes since last release:
-            ${{ github.event.compare }}
-          artifacts: |
-            build/YourProject-*.exe
 
   releaseUbuntu:
     runs-on: ubuntu-latest
@@ -50,15 +41,6 @@ jobs:
       - run: sudo snap install snapcraft --classic
       - run: npm ci
       - run: npm run publish
-      - name: Create Ubuntu Release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: Release ${GITHUB_REF}
-          body: |
-            Changes since last release:
-            ${{ github.event.compare }}
-          artifacts: |
-            build/YourProject-*.snap
 
   releaseArch:
     runs-on: ubuntu-latest
@@ -72,19 +54,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - run: sudo apt-get install pacman snap
+      - run: sudo apt-get update && sudo apt-get -y install snapd
+      - run: sudo apt-get install pacman
       - run: sudo pacman -Syyu --noconfirm
       - run: sudo pacman -S --noconfirm snapd
       - run: sudo systemctl enable --now snapd.socket
       - run: sudo snap install snapcraft --classic
       - run: npm ci
       - run: npm run publish
-      - name: Create Arch Linux Release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: Release ${GITHUB_REF}
-          body: |
-            Changes since last release:
-            ${{ github.event.compare }}
-          artifacts: |
-            build/YourProject-*.snap
