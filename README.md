@@ -15,12 +15,21 @@ Tested with Ubuntu 20 and Windows 10.
 # Screenshots
 
 Main page when app is opened
+
 ![Index.html](screenshots/index.png)
+
 Host page
+
 ![Host](screenshots/host.png)
+
 Watch page
+
 ![Watch](screenshots/watch.png)
+
 Hosting
+
 ![Hosting](screenshots/sharing.png)
+
 Watching
+
 ![Watching](screenshots/watching.png)
