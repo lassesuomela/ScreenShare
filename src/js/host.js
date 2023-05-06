@@ -36,11 +36,6 @@ const call = (remotePeerId) => {
     console.log("got remote stream");
     videoFeed.srcObject = remoteStream;
     videoFeed.play();
-
-    setInterval(() => {
-      console.log("Sending ping");
-      callConnection.send("Ping");
-    }, 5000);
   });
 };
 
@@ -124,6 +119,10 @@ const selectSource = async (source) => {
       startBtn.removeAttribute("disabled");
     }
     stopBtn.removeAttribute("disabled");
+
+    if (startBtn.innerText === "Streaming") {
+      call(peerId.value);
+    }
   } catch (err) {
     console.error(err);
     alert("Failed to get user media");
