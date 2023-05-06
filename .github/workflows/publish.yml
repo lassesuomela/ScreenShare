@@ -22,6 +22,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - run: npm ci
       - run: npm run publish
 
@@ -37,6 +38,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - run: sudo apt-get update && sudo apt-get -y install snapd
       - run: sudo snap install snapcraft --classic
       - run: npm ci
@@ -54,6 +56,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - run: sudo apt-get update && sudo apt-get -y install snapd
       - run: sudo apt-get install pacman
       - run: sudo pacman -Syyu --noconfirm
