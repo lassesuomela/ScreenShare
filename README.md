@@ -1,4 +1,6 @@
 # ScreenShare
+[![Build and release](https://github.com/lassesuomela/ScreenShare/actions/workflows/publish.yml/badge.svg)](https://github.com/lassesuomela/ScreenShare/actions/workflows/publish.yml)
+[![Node.js CI](https://github.com/lassesuomela/ScreenShare/actions/workflows/node.js.yml/badge.svg)](https://github.com/lassesuomela/ScreenShare/actions/workflows/node.js.yml)
 
 For one-way screen sharing. Made with Electron and vanilla JS.
 
