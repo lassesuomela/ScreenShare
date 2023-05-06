@@ -10,20 +10,80 @@ env:
   GITHUB_TOKEN: ${{secrets.REPO_GITHUB_TOKEN}}
 
 jobs:
-  releaseWin32:
-    runs-on: ubuntu-latest
-
+  releaseWindows:
+    runs-on: windows-latest
     strategy:
       matrix:
         node-version: [18.x]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: sudo apt-get install wine64
-    - run: npm ci
-    - run: npm run publish --platform=win32 --arch=x64
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build
+      - name: Create Windows Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${GITHUB_REF}
+          body: |
+            Changes since last release:
+            ${{ github.event.compare }}
+          artifacts: |
+            build/YourProject-*.exe
+
+  releaseUbuntu:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: sudo apt-get update && sudo apt-get -y install snapd
+      - run: sudo snap install snapcraft --classic
+      - run: npm ci
+      - run: npm run build
+      - name: Create Ubuntu Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${GITHUB_REF}
+          body: |
+            Changes since last release:
+            ${{ github.event.compare }}
+          artifacts: |
+            build/YourProject-*.snap
+
+  releaseArch:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: sudo pacman -Syyu --noconfirm
+      - run: sudo pacman -S --noconfirm snapd
+      - run: sudo systemctl enable --now snapd.socket
+      - run: sudo snap install snapcraft --classic
+      - run: npm ci
+      - run: npm run build
+      - name: Create Arch Linux Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${GITHUB_REF}
+          body: |
+            Changes since last release:
+            ${{ github.event.compare }}
+          artifacts: |
+            build/YourProject-*.snap
