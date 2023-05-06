@@ -14,13 +14,22 @@ peer.on("open", (id) => {
   myId = id;
 });
 
+peer.on("connection", (connection) => {
+  console.log("connected");
+  connection.on("open", () => {
+    connection.on("data", (data) => {
+      console.log("Received", data);
+    });
+
+    connection.send("test");
+  });
+});
+
 peer.on("call", (call) => {
-  console.log("answering call");
   callConnection = call;
 
   call.answer();
   call.on("stream", (remoteStream) => {
-    console.log("got call stream");
     videoFeed.srcObject = remoteStream;
     videoFeed.play();
 

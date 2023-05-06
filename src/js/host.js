@@ -24,18 +24,22 @@ peer.on("disconnected", () => {
   stop();
 });
 
-peer.on("connection", (connection) => {
-  console.log("connected");
-  console.log(connection);
-});
-
 const call = (remotePeerId) => {
   callConnection = peer.call(remotePeerId, stream);
+};
 
-  callConnection.on("stream", (remoteStream) => {
-    console.log("got remote stream");
-    videoFeed.srcObject = remoteStream;
-    videoFeed.play();
+const connect = (remotePeerId) => {
+  const conn = peer.connect(remotePeerId);
+
+  conn.on("open", () => {
+    console.log("connected");
+    console.log(conn);
+
+    conn.on("data", (data) => {
+      console.log("Received", data);
+    });
+
+    conn.send("test");
   });
 };
 
@@ -49,6 +53,7 @@ startBtn.onclick = (e) => {
 
   console.log("Calling to:", peerId.value);
   call(peerId.value);
+  connect(peerId.value);
 };
 
 stopBtn.onclick = (e) => {
