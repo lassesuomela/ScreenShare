@@ -1,6 +1,6 @@
 {
   "name": "screenshare",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "One way screen sharing",
   "main": "src/main.js",
   "scripts": {
