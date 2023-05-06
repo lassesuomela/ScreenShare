@@ -63,6 +63,12 @@ video {
   font-size: 3em;
 }
 
+.statusContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
 @media screen and (max-width: 992px){
   .video-container {
     min-width: 60vw;
@@ -70,3 +76,4 @@ video {
     margin-bottom: 1em;
   }
 }
+

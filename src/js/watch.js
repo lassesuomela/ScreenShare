@@ -18,7 +18,6 @@ peer.on("open", (id) => {
 
 peer.on("connection", (conn) => {
   connection = conn;
-  console.log("connected");
   connection.on("open", () => {
     connection.on("data", (data) => {
       console.log("Received", data);
@@ -60,7 +59,6 @@ stopBtn.onclick = (e) => {
   if (!callConnection) {
     return;
   }
-  console.log(connection);
   connection.send("Stop");
   stop();
 };

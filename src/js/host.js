@@ -84,7 +84,7 @@ const stop = () => {
   statusTxt.innerText = "Not connected";
 
   currentSourceText.innerText = "-";
-  peerId.innerText = "";
+  peerId.value = "";
 
   stream = null;
   setTimeout(() => {
