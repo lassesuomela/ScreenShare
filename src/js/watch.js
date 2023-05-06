@@ -2,30 +2,43 @@ const { Peer } = require("peerjs");
 
 let callConnection;
 let myId;
-
+let connection;
 const videoFeed = document.getElementById("master");
 const stopBtn = document.getElementById("stopBtn");
 const copyIdBtn = document.getElementById("copyIdBtn");
 const toggleFullscreenBtn = document.getElementById("toggleFullscreenBtn");
+const statusTxt = document.getElementById("statusTxt");
 
 const peer = new Peer();
 
 peer.on("open", (id) => {
+  statusTxt.innerText = "Not connected";
   myId = id;
 });
 
-peer.on("connection", (connection) => {
+peer.on("connection", (conn) => {
+  connection = conn;
   console.log("connected");
   connection.on("open", () => {
     connection.on("data", (data) => {
       console.log("Received", data);
+      if (statusTxt.innerText !== "Connected") {
+        statusTxt.innerText = "Connected";
+      }
+
+      if (data === "Stop") {
+        stop();
+      }
     });
 
-    connection.send("test");
+    connection.send("Connection success");
   });
 });
 
 peer.on("call", (call) => {
+  if (statusTxt.innerText !== "Connecting") {
+    statusTxt.innerText = "Connecting";
+  }
   callConnection = call;
 
   call.answer();
@@ -47,7 +60,8 @@ stopBtn.onclick = (e) => {
   if (!callConnection) {
     return;
   }
-  callConnection.close();
+  console.log(connection);
+  connection.send("Stop");
   stop();
 };
 
@@ -59,6 +73,11 @@ const stop = () => {
   toggleFullscreenBtn.setAttribute("disabled", true);
   stopBtn.setAttribute("disabled", true);
   videoFeed.srcObject = null;
+  statusTxt.innerText = "Not connected";
+  setTimeout(() => {
+    connection.close();
+    callConnection.close();
+  }, 1000);
 };
 
 toggleFullscreenBtn.onclick = (e) => {

@@ -6,6 +6,7 @@ const { Peer } = require("peerjs");
 let videoOptionsMenu;
 let stream;
 let callConnection;
+let connection;
 
 const peer = new Peer();
 
@@ -15,9 +16,12 @@ const stopBtn = document.getElementById("stopBtn");
 const peerId = document.getElementById("peerId");
 
 const currentSourceText = document.getElementById("currentSourceText");
+const statusTxt = document.getElementById("statusTxt");
 const videoSelectBtn = document.getElementById("videoSelectBtn");
 
-peer.on("open", (id) => {});
+peer.on("open", (id) => {
+  statusTxt.innerText = "Not connected";
+});
 
 peer.on("disconnected", () => {
   console.log("Peer dc");
@@ -25,21 +29,29 @@ peer.on("disconnected", () => {
 });
 
 const call = (remotePeerId) => {
+  if (statusTxt.innerText !== "Connecting") {
+    statusTxt.innerText = "Connecting";
+  }
   callConnection = peer.call(remotePeerId, stream);
+  connect(remotePeerId);
 };
 
 const connect = (remotePeerId) => {
-  const conn = peer.connect(remotePeerId);
+  connection = peer.connect(remotePeerId);
 
-  conn.on("open", () => {
-    console.log("connected");
-    console.log(conn);
-
-    conn.on("data", (data) => {
+  connection.on("open", () => {
+    connection.on("data", (data) => {
+      if (statusTxt.innerText !== "Connected") {
+        statusTxt.innerText = "Connected";
+      }
       console.log("Received", data);
+
+      if (data === "Stop") {
+        stop();
+      }
     });
 
-    conn.send("test");
+    connection.send("Connection success");
   });
 };
 
@@ -53,24 +65,32 @@ startBtn.onclick = (e) => {
 
   console.log("Calling to:", peerId.value);
   call(peerId.value);
-  connect(peerId.value);
 };
 
 stopBtn.onclick = (e) => {
   if (!stream) {
     return;
   }
-
+  connection.send("Stop");
   stop();
-  callConnection.close();
 };
 
 const stop = () => {
   startBtn.classList.remove("btn-danger");
   startBtn.innerText = "Start";
-  startBtn.removeAttribute("disabled");
+  startBtn.setAttribute("disabled", true);
+  stopBtn.setAttribute("disabled", true);
+
+  statusTxt.innerText = "Not connected";
 
   currentSourceText.innerText = "-";
+  peerId.innerText = "";
+
+  stream = null;
+  setTimeout(() => {
+    connection.close();
+    callConnection.close();
+  }, 1000);
 };
 
 const showSources = () => {
