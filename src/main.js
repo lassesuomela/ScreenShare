@@ -23,8 +23,6 @@ const createWindow = () => {
   remoteMain.enable(mainWindow.webContents);
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
-
-  mainWindow.webContents.openDevTools();
 };
 
 app.on("ready", createWindow);
