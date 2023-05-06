@@ -8,7 +8,8 @@ For one-way screen sharing. Made with Electron and vanilla JS.
  - `npm start` to start dev version
  - `npm run make` to build the app
    - Built version will be in `out/screenshare-<os>-<arch>` directory
-
+# Compatibility
+Tested with Ubuntu 20 and Windows 10.
 # Screenshots
 
 Main page when app is opened
