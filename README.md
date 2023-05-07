@@ -19,6 +19,7 @@ Watch
   1. Start client
   2. Click "Watch" button
   3. Copy ID
+
 Host
   1. Start client
   2. Paste the ID to the ID field
