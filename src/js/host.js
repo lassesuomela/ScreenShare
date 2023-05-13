@@ -37,6 +37,12 @@ const call = (remotePeerId) => {
   connect(remotePeerId);
 };
 
+const switchStreams = () => {
+  callConnection.peerConnection
+    .getSenders()[0]
+    .replaceTrack(stream.getVideoTracks()[0]);
+};
+
 const connect = (remotePeerId) => {
   connection = peer.connect(remotePeerId);
 
@@ -138,6 +144,7 @@ const selectSource = async (source) => {
       mandatory: {
         chromeMediaSource: "desktop",
         chromeMediaSourceId: source.id,
+        cursor: "never",
         frameRate: 60,
       },
       exact: {
@@ -148,13 +155,19 @@ const selectSource = async (source) => {
   };
 
   try {
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-    if (startBtn.innerText === "Start") {
-      startBtn.removeAttribute("disabled");
-    }
+    if (!stream) {
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-    if (startBtn.innerText === "Streaming") {
-      call(peerId.value);
+      if (startBtn.innerText === "Start") {
+        startBtn.removeAttribute("disabled");
+      }
+
+      if (startBtn.innerText === "Streaming") {
+        call(peerId.value);
+      }
+    } else {
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
+      switchStreams();
     }
   } catch (err) {
     console.error(err);
